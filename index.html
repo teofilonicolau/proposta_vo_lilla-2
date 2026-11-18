@@ -471,52 +471,46 @@
     .prints-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
-      margin-top: 16px;
+      gap: 20px;
+      margin-top: 24px;
     }
 
     @media (min-width: 768px) {
-      .prints-grid--duplo {
-        grid-template-columns: repeat(2, 1fr);
+      .prints-grid--triplo {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
 
     .print-card {
-      background: var(--bg-superficie-elevada);
-      border: 1px solid color-mix(in srgb, var(--destaque-borda) 30%, transparent);
-      border-radius: 12px;
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+      border-radius: var(--raio-card);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--sombra);
+    }
+
+    .print-card--alerta {
+      background: var(--alerta-bg);
+      border: 2px solid var(--alerta-borda);
     }
 
     .print-card__midia {
       position: relative;
       aspect-ratio: 16 / 10;
-      background: #181512;
+      background: #141210;
       cursor: zoom-in;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 6px;
     }
 
     .print-card__midia img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-    }
-
-    .print-card__fallback {
-      display: none;
-      color: #F4EDE1;
-      font-weight: 600;
-      padding: 16px;
-    }
-
-    .print-card__midia.sem-imagem .print-card__fallback {
-      display: block;
-    }
-
-    .print-card__midia.sem-imagem img {
-      display: none;
+      object-fit: contain;
     }
 
     .print-card__ampliar {
@@ -536,10 +530,47 @@
       pointer-events: none;
     }
 
+    .print-card__corpo {
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .print-card__badge {
+      align-self: flex-start;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--destaque-borda) 20%, transparent);
+      color: var(--destaque);
+    }
+
+    .print-card__badge--alerta {
+      background: var(--alerta-borda);
+      color: #141414;
+    }
+
+    .print-card__titulo {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--texto-principal);
+    }
+
     .print-card__legenda {
-      padding: 14px 16px;
       font-size: 1rem;
       color: var(--texto-principal);
+    }
+
+    .print-card--alerta .print-card__titulo,
+    .print-card--alerta .print-card__legenda {
+      color: var(--alerta-texto);
     }
 
     /* ==========================================================================
@@ -982,6 +1013,13 @@
       position: relative;
     }
 
+    #lightboxImg {
+      width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+      background: #141210;
+    }
+
     .lightbox__fechar {
       position: absolute;
       top: 12px;
@@ -1173,73 +1211,43 @@
           Reproduzimos os 3 passos que um cliente faz no celular quando decide conhecer a casa ou fazer um pedido.
         </p>
 
-        <div class="timeline">
-          <!-- Passo 1 da Jornada -->
-          <article class="timeline-passo" data-step="1">
-            <div class="timeline-passo__cabecalho">
-              <h3 class="timeline-passo__titulo">1. Buscar no Google</h3>
-              <p class="timeline-passo__texto">
-                O cliente encontra uma excelente avaliação no Google (4,4 ★ com 294 avaliações), mas vê o nome com hífen (<span class="nowrap">"Vó Lila Gastro-bar"</span>) e, logo abaixo nas buscas, uma página no Tripadvisor ainda com o nome antigo da casa.
-              </p>
+        <div class="prints-grid prints-grid--triplo">
+          <!-- Card PRINT 01 (Anota) -->
+          <article class="print-card print-card--alerta">
+            <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/01.webp" data-lightbox-caption="Captura do Anota em [DATA E HORA DO PRINT]: loja exibida como offline em horário de funcionamento.">
+              <img src="assets/prints/01.webp" loading="lazy" alt="Captura do Anota em [DATA E HORA DO PRINT]: loja exibida como offline em horário de funcionamento." />
+              <span class="print-card__ampliar">Ampliar print</span>
             </div>
-            <div class="prints-grid prints-grid--duplo">
-              <div class="print-card">
-                <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/02.png" data-lightbox-caption="Perfil no Google: nota 4,4 com 294 avaliações e grafia 'Vó Lila Gastro-bar'.">
-                  <img src="assets/prints/02.png" loading="lazy" alt="Captura do Perfil no Google mostrando nota 4,4 com 294 avaliações e nome Vó Lila Gastro-bar" onerror="this.parentElement.classList.add('sem-imagem')" />
-                  <span class="print-card__fallback">Print em breve</span>
-                  <span class="print-card__ampliar">Ampliar print</span>
-                </div>
-                <p class="print-card__legenda">Perfil no Google: excelente reputação (4,4 ★), com grafia <span class="nowrap">"Gastro-bar"</span>.</p>
-              </div>
-
-              <div class="print-card">
-                <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/03.png" data-lightbox-caption="Resultado no Tripadvisor exibindo nomenclatura antiga.">
-                  <img src="assets/prints/03.png" loading="lazy" alt="Captura do Tripadvisor mostrando registro com nomenclatura antiga" onerror="this.parentElement.classList.add('sem-imagem')" />
-                  <span class="print-card__fallback">Print em breve</span>
-                  <span class="print-card__ampliar">Ampliar print</span>
-                </div>
-                <p class="print-card__legenda">Tripadvisor: página ainda exibe o nome antigo "Cafe Gourmet".</p>
-              </div>
+            <div class="print-card__corpo">
+              <span class="print-card__badge print-card__badge--alerta">Prioridade 1 • Alerta</span>
+              <h3 class="print-card__titulo">Anota AI: "Loja offline" às 17h34 (17/11/2026)</h3>
+              <p class="print-card__legenda">Captura do Anota em [DATA E HORA DO PRINT]: loja exibida como offline em horário de funcionamento.</p>
             </div>
           </article>
 
-          <!-- Passo 2 da Jornada -->
-          <article class="timeline-passo" data-step="2">
-            <div class="timeline-passo__cabecalho">
-              <h3 class="timeline-passo__titulo">2. Abrir o Instagram</h3>
-              <p class="timeline-passo__texto">
-                No Instagram oficial (<span class="nowrap">"Vó Lila Gastrobar"</span>), o cliente toca no link da bio (Linktree), que exibe o título "VÓ LILA Restaurant" e concentra os botões de cardápio e dois números de WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span>.
-              </p>
+          <!-- Card PRINT 02 (Google) -->
+          <article class="print-card">
+            <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/02.webp" data-lightbox-caption="Perfil no Google com o nome 'Vó Lila Gastro-bar' (com hífen), nota 4,4 com 294 avaliações e botão de pedido apontando para o Anota.">
+              <img src="assets/prints/02.webp" loading="lazy" alt="Perfil no Google com o nome 'Vó Lila Gastro-bar' (com hífen), nota 4,4 com 294 avaliações e botão de pedido apontando para o Anota." />
+              <span class="print-card__ampliar">Ampliar print</span>
             </div>
-            <div class="prints-grid">
-              <div class="print-card">
-                <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/04.png" data-lightbox-caption="Linktree na bio do Instagram concentrando cardápio e dois contatos de WhatsApp.">
-                  <img src="assets/prints/04.png" loading="lazy" alt="Captura do Linktree na bio do Instagram com atalhos de cardápio e WhatsApp" onerror="this.parentElement.classList.add('sem-imagem')" />
-                  <span class="print-card__fallback">Print em breve</span>
-                  <span class="print-card__ampliar">Ampliar print</span>
-                </div>
-                <p class="print-card__legenda">Link da bio (Linktree): atalhos de cardápio, delivery e reservas com dois números de WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span>.</p>
-              </div>
+            <div class="print-card__corpo">
+              <span class="print-card__badge">Perfil no Google</span>
+              <h3 class="print-card__titulo">Perfil no Google: nota 4,4 (294 avaliações) e nome com hífen</h3>
+              <p class="print-card__legenda">Perfil no Google com o nome 'Vó Lila Gastro-bar' (com hífen), nota 4,4 com 294 avaliações e botão de pedido apontando para o Anota.</p>
             </div>
           </article>
 
-          <!-- Passo 3 da Jornada -->
-          <article class="timeline-passo" data-step="3">
-            <div class="timeline-passo__cabecalho">
-              <h3 class="timeline-passo__titulo">3. Tentar pedir</h3>
-              <p class="timeline-passo__texto">
-                Ao tocar para abrir o cardápio digital no Anota, o cliente visualiza o aviso de loja fechada durante o horário de atendimento.
-              </p>
+          <!-- Card PRINT 03 (Tripadvisor) -->
+          <article class="print-card">
+            <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/03.webp" data-lightbox-caption="Página no Tripadvisor com o nome 'Vo Lila Cafe Gourmet', ainda não reivindicada pelo negócio.">
+              <img src="assets/prints/03.webp" loading="lazy" alt="Página no Tripadvisor com o nome 'Vo Lila Cafe Gourmet', ainda não reivindicada pelo negócio." />
+              <span class="print-card__ampliar">Ampliar print</span>
             </div>
-            <div class="prints-grid">
-              <div class="print-card">
-                <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/01.png" data-lightbox-caption="Loja de delivery exibida como offline em horário de funcionamento (observado em 17/11/2026, 17h34).">
-                  <img src="assets/prints/01.png" loading="lazy" alt="Captura da loja no Anota exibindo aviso de Loja offline às 17h34 em 17/11/2026" onerror="this.parentElement.classList.add('sem-imagem')" />
-                  <span class="print-card__fallback">Print em breve</span>
-                  <span class="print-card__ampliar">Ampliar print</span>
-                </div>
-                <p class="print-card__legenda">Loja de delivery exibida como offline em horário de funcionamento (observado em 17/11/2026, 17h34).</p>
-              </div>
+            <div class="print-card__corpo">
+              <span class="print-card__badge">Busca e Diretórios</span>
+              <h3 class="print-card__titulo">Registro desatualizado no Tripadvisor</h3>
+              <p class="print-card__legenda">Página no Tripadvisor com o nome 'Vo Lila Cafe Gourmet', ainda não reivindicada pelo negócio.</p>
             </div>
           </article>
         </div>
@@ -1298,7 +1306,7 @@
               <td data-label="Canal"><strong>Link da bio (Linktree)</strong></td>
               <td data-label="Nome"><span class="diff-mark">VÓ LILA Restaurant</span></td>
               <td data-label="Endereço"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
-              <td data-label="Telefone"><span class="diff-mark">Botão WhatsApp com número de 8 dígitos</span> <span class="tag-placeholder">[A CONFIRMAR]</span></td>
+              <td data-label="Telefone"><span class="diff-mark">Botão WhatsApp, 8 dígitos</span> <span class="tag-placeholder">[A CONFIRMAR]</span></td>
             </tr>
             <tr>
               <td data-label="Canal"><strong>Tripadvisor</strong></td>
@@ -1331,7 +1339,7 @@
               <h3 class="titulo-ato" style="font-size: 1.65rem; margin-bottom: 4px;"><span class="nowrap">Vó Lila Gastro-bar</span></h3>
               <p>★ 4,4 (294 avaliações) • Grafia divergente da logo e do Instagram</p>
               <p><strong>Endereço:</strong> R. Monsenhor Frota vs. Av. Monsenhor Frota entre canais</p>
-              <p><strong>Link e atendimento:</strong> Agregador externo (Linktree) e dois números de WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span></p>
+              <p><strong>Link e atendimento:</strong> Agregador externo (Linktree) e número do WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span></p>
             </div>
 
             <!-- Camada Depois -->
@@ -1428,7 +1436,7 @@
             <span class="passo-card__num">1</span>
             <h3 class="passo-card__titulo">Conversa de 10 minutos</h3>
             <p>
-              Alinhamento rápido para validar o status da loja no Anota e confirmar os dois números de WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span>.
+              Alinhamento rápido para validar o status da loja no Anota e confirmar o número oficial do WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span>.
             </p>
           </div>
 

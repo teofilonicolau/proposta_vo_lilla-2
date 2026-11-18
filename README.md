@@ -11,13 +11,14 @@ vo-lila/
 └── assets/
     ├── logo-vo-lila.webp
     └── prints/
-        ├── 01.png
-        ├── 02.png
-        ├── 03.png
-        └── 04.png
+        ├── 01.webp
+        ├── 02.webp
+        └── 03.webp
 ```
 
 ## O que foi alterado nesta atualização
+
+- **Prints reais em `.webp` e grid de 3 cards:** atualizados para `assets/prints/01.webp` (Anota), `assets/prints/02.webp` (Perfil no Google) e `assets/prints/03.webp` (Tripadvisor), com `object-fit: contain` (sem cortar partes úteis da imagem), remoção do texto `"Print em breve"` e remoção completa do card do Linktree (PRINT 04), ajustando o layout para 3 cards alinhados (3 colunas no desktop e 1 coluna no celular).
 
 - **Nova seção ("Nome, endereço e telefone: onde o cliente se confunde"):** inserida entre o Diagnóstico em 4 pontos e a Proposta em duas etapas (`#canais`), com tabela responsiva que se transforma em cartões empilhados no celular (375px, sem rolagem horizontal, texto mínimo de 16px) e linha de cabeçalho em bronze no desktop, seguida da caixa de destaque explicando a padronização com aprovação do dono.
 - **Etapa 1 (Perfil no Google):** adicionados os 3 itens de consistência cadastral (*"Padronizar nome, endereço e telefone com a placa da fachada"*, *"Conferir o ponto no mapa e o CEP"* e *"Corrigir o telefone principal, se necessário"*), mantendo todos os itens anteriores.
@@ -61,12 +62,11 @@ No arquivo `index.html`, localize o bloco `:root` (logo no início da tag `<styl
 }
 ```
 
-### 2. Substituir os prints do diagnóstico
-Substitua os arquivos dentro de `assets/prints/` mantendo os mesmos nomes (caso algum arquivo seja removido antes do envio, o quadro mostrará automaticamente apenas a legenda `"Print em breve"`):
-- `assets/prints/01.png` — Print da loja no Anota AI mostrando "Loja offline" em horário de funcionamento (17/11/2026, 17h34).
-- `assets/prints/02.png` — Print do Perfil da Empresa no Google (nota 4,4 com 294 avaliações e nome com hífen "Gastro-bar").
-- `assets/prints/03.png` — Print da página no Tripadvisor com a nomenclatura antiga.
-- `assets/prints/04.png` — Print do Linktree na bio do Instagram com cardápio e os dois números de WhatsApp.
+### 2. Prints do diagnóstico
+Os 3 prints ativos ficam em `assets/prints/` (o antigo card 04 do Linktree foi removido):
+- `assets/prints/01.webp` — Captura do Anota em 17/11/2026, 17h34: loja de delivery exibida como offline em horário de funcionamento.
+- `assets/prints/02.webp` — Perfil no Google com o nome 'Vó Lila Gastro-bar' (com hífen), nota 4,4 com 294 avaliações e botão de pedido apontando para o Anota.
+- `assets/prints/03.webp` — Página no Tripadvisor com o nome 'Vo Lila Cafe Gourmet', ainda não reivindicada pelo negócio.
 
 ### 3. Atualizar links, preços e dados a confirmar
 No arquivo `index.html`, faça uma busca (`Ctrl + F`) por `[A CONFIRMAR]`, `[PREÇO]` e `[LINK]` para substituir pelos dados finais validados.
