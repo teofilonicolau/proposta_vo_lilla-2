@@ -1,5 +1,11 @@
 # Proposta de Presença Digital — Vó Lila Gastrobar
 
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/80ade971-24a4-4b75-8129-038af7f9014f" />
+
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/5180a53a-c789-4bfd-b109-daed9ced8819" />
+
+
+
 Página única de apresentação (`index.html`) em HTML + CSS + JS puro, responsiva (mobile-first) e sem dependências externas além do Google Fonts.
 
 ## Estrutura de arquivos
