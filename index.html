@@ -1,0 +1,1675 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vó Lila Gastrobar: proposta de presença digital</title>
+  <meta name="description" content="Vó Lila Gastrobar: proposta de presença digital" />
+
+  <!-- Google Fonts: Cormorant Garamond (serif) & Plus Jakarta Sans (sans-serif) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       1. IDENTIDADE VISUAL & TOKENS (:root)
+       ========================================================================== */
+    :root {
+      --preto: #141414;
+      --creme: #F4EDE1;
+      --madeira: #5C4234;
+      --bronze: #B08A4E;
+      --verde: #2E3A2A;
+
+      /* Tokens semânticos (Modo Escuro padrão) */
+      --bg-principal: var(--preto);
+      --bg-superficie: #1E1B18;
+      --bg-superficie-elevada: #27211C;
+      --texto-principal: var(--creme);
+      --texto-secundario: #DFD5C6;
+      --destaque: #D4AB6A;
+      --destaque-borda: var(--bronze);
+      --alerta-bg: #2D1612;
+      --alerta-borda: #E06D53;
+      --alerta-texto: #FFDAD2;
+      --diff-bg: rgba(176, 138, 78, 0.18);
+      --diff-borda: #D4AB6A;
+      --sombra: 0 18px 44px rgba(0, 0, 0, 0.45);
+
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --espaco-lateral: 16px;
+      --largura-max: 1040px;
+      --raio-card: 16px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) {
+        --bg-principal: var(--creme);
+        --bg-superficie: #EAE0D0;
+        --bg-superficie-elevada: #FFFFFF;
+        --texto-principal: var(--preto);
+        --texto-secundario: #3B2B20;
+        --destaque: #6E4F20;
+        --destaque-borda: #8C6730;
+        --alerta-bg: #FDECE8;
+        --alerta-borda: #B3361E;
+        --alerta-texto: #5C1508;
+        --diff-bg: rgba(176, 138, 78, 0.22);
+        --diff-borda: #6E4F20;
+        --sombra: 0 12px 30px rgba(20, 20, 20, 0.08);
+      }
+    }
+
+    :root[data-theme="light"] {
+      --bg-principal: var(--creme);
+      --bg-superficie: #EAE0D0;
+      --bg-superficie-elevada: #FFFFFF;
+      --texto-principal: var(--preto);
+      --texto-secundario: #3B2B20;
+      --destaque: #6E4F20;
+      --destaque-borda: #8C6730;
+      --alerta-bg: #FDECE8;
+      --alerta-borda: #B3361E;
+      --alerta-texto: #5C1508;
+      --diff-bg: rgba(176, 138, 78, 0.22);
+      --diff-borda: #6E4F20;
+      --sombra: 0 12px 30px rgba(20, 20, 20, 0.08);
+    }
+
+    /* ==========================================================================
+       2. RESET & BASE MOBILE-FIRST (375px sem rolagem horizontal)
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg-principal);
+      color: var(--texto-principal);
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .nowrap {
+      white-space: nowrap;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--destaque);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    /* ==========================================================================
+       3. BARRA SUPERIOR E BOTÃO FLUTUANTE PDF
+       ========================================================================== */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg-principal) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid color-mix(in srgb, var(--destaque-borda) 25%, transparent);
+      padding: 10px var(--espaco-lateral) 0;
+    }
+
+    .topbar__inner {
+      max-width: var(--largura-max);
+      margin: 0 auto;
+      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .progresso-atos {
+      max-width: var(--largura-max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+      padding-bottom: 6px;
+    }
+
+    .progresso-atos__item {
+      height: 3px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--destaque-borda) 25%, transparent);
+      transition: background-color 0.25s ease;
+    }
+
+    .progresso-atos__item.ativo {
+      background: var(--bronze);
+    }
+
+    .topbar__brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--texto-principal);
+      font-weight: 600;
+      font-size: 1rem;
+      white-space: nowrap;
+    }
+
+    .topbar__logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--destaque-borda);
+    }
+
+    .theme-toggle {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-superficie);
+      color: var(--texto-principal);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 45%, transparent);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .fab-pdf {
+      position: fixed;
+      bottom: 20px;
+      right: 16px;
+      z-index: 110;
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bronze);
+      color: #141414;
+      border: 1px solid #F4EDE1;
+      border-radius: 999px;
+      padding: 10px 20px;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 700;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.2s ease;
+    }
+
+    .fab-pdf:hover {
+      filter: brightness(1.08);
+      transform: translateY(-2px);
+    }
+
+    /* ==========================================================================
+       4. ESTRUTURA DOS 5 ATOS & ANIMAÇÕES AO ROLAR
+       ========================================================================== */
+    .ato {
+      min-height: 100svh;
+      padding: 88px var(--espaco-lateral) 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-bottom: 1px solid color-mix(in srgb, var(--destaque-borda) 18%, transparent);
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--largura-max);
+      margin: 0 auto;
+    }
+
+    .ato-indicador {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--destaque);
+      margin-bottom: 10px;
+    }
+
+    .titulo-ato {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5.5vw, 3.1rem);
+      font-weight: 700;
+      line-height: 1.14;
+      margin-bottom: 14px;
+      color: var(--texto-principal);
+    }
+
+    .subtitulo-ato {
+      font-size: 1.05rem;
+      color: var(--texto-secundario);
+      max-width: 65ch;
+      margin-bottom: 32px;
+    }
+
+    /* Animações suaves de entrada (respeitando prefers-reduced-motion) */
+    .revelar {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .revelar.visivel {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      .revelar {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Botões padrão */
+    .btn {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      text-align: center;
+      transition: transform 0.15s ease, filter 0.2s ease;
+    }
+
+    .btn--primario {
+      background-color: var(--bronze);
+      color: #141414;
+    }
+
+    .btn--primario:hover {
+      filter: brightness(1.08);
+    }
+
+    /* Marcador de atenção [A CONFIRMAR] e [PREÇO] */
+    .tag-placeholder {
+      font-family: monospace;
+      font-weight: 700;
+      color: var(--alerta-texto);
+      background: var(--alerta-bg);
+      border: 1px solid var(--alerta-borda);
+      padding: 2px 7px;
+      border-radius: 5px;
+      white-space: nowrap;
+      font-size: 0.92em;
+    }
+
+    /* ==========================================================================
+       ATO 1: ABERTURA
+       ========================================================================== */
+    .ato-abertura {
+      background:
+        radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--madeira) 45%, transparent), transparent 55%),
+        radial-gradient(circle at 15% 80%, color-mix(in srgb, var(--verde) 35%, transparent), transparent 50%),
+        var(--bg-principal);
+    }
+
+    .abertura-card {
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 40%, transparent);
+      border-radius: 22px;
+      padding: 36px 22px;
+      box-shadow: var(--sombra);
+    }
+
+    @media (min-width: 768px) {
+      .abertura-card {
+        padding: 52px 44px;
+      }
+    }
+
+    .abertura-topo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .abertura-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--bronze);
+      flex-shrink: 0;
+    }
+
+    .abertura-titulo {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.12;
+      margin-bottom: 20px;
+    }
+
+    .abertura-destaque {
+      color: var(--destaque);
+      font-style: italic;
+    }
+
+    .abertura-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      padding-top: 20px;
+      margin-bottom: 28px;
+      border-top: 1px solid color-mix(in srgb, var(--destaque-borda) 25%, transparent);
+      font-size: 1rem;
+      color: var(--texto-secundario);
+    }
+
+    /* ==========================================================================
+       ATO 2: A EXPERIÊNCIA DO CLIENTE (Linha do tempo de 3 passos)
+       ========================================================================== */
+    .timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      padding-left: 20px;
+      border-left: 2px solid var(--destaque-borda);
+    }
+
+    @media (min-width: 768px) {
+      .timeline {
+        padding-left: 32px;
+      }
+    }
+
+    .timeline-passo {
+      position: relative;
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+      border-radius: var(--raio-card);
+      padding: 24px 20px;
+      box-shadow: var(--sombra);
+    }
+
+    .timeline-passo::before {
+      content: attr(data-step);
+      position: absolute;
+      left: -35px;
+      top: 24px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bronze);
+      color: #141414;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (min-width: 768px) {
+      .timeline-passo::before {
+        left: -47px;
+      }
+    }
+
+    .timeline-passo__cabecalho {
+      margin-bottom: 14px;
+    }
+
+    .timeline-passo__titulo {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .timeline-passo__texto {
+      font-size: 1rem;
+      color: var(--texto-secundario);
+    }
+
+    .prints-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .prints-grid--duplo {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .print-card {
+      background: var(--bg-superficie-elevada);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 30%, transparent);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .print-card__midia {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: #181512;
+      cursor: zoom-in;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .print-card__midia img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .print-card__fallback {
+      display: none;
+      color: #F4EDE1;
+      font-weight: 600;
+      padding: 16px;
+    }
+
+    .print-card__midia.sem-imagem .print-card__fallback {
+      display: block;
+    }
+
+    .print-card__midia.sem-imagem img {
+      display: none;
+    }
+
+    .print-card__ampliar {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      background: rgba(20, 20, 20, 0.88);
+      color: #F4EDE1;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(176, 138, 78, 0.65);
+      pointer-events: none;
+    }
+
+    .print-card__legenda {
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: var(--texto-principal);
+    }
+
+    /* ==========================================================================
+       ATO 3: O QUE ENCONTRAMOS (Tabela NAP + Alerta do Anota)
+       ========================================================================== */
+    .alerta-anota {
+      background: var(--alerta-bg);
+      border: 2px solid var(--alerta-borda);
+      border-radius: var(--raio-card);
+      padding: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: var(--sombra);
+    }
+
+    .alerta-anota__tag {
+      align-self: flex-start;
+      background: var(--alerta-borda);
+      color: #141414;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .alerta-anota__legenda {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--alerta-texto);
+    }
+
+    .tabela-nap {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+
+    .tabela-nap thead {
+      display: none;
+    }
+
+    .tabela-nap tbody {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .tabela-nap tr {
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+      border-radius: var(--raio-card);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--sombra);
+    }
+
+    .tabela-nap td {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 1rem;
+      color: var(--texto-principal);
+      word-break: break-word;
+    }
+
+    .tabela-nap td::before {
+      content: attr(data-label);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--destaque);
+    }
+
+    .diff-mark {
+      display: inline-block;
+      background: var(--diff-bg);
+      border-bottom: 2px solid var(--diff-borda);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    @media (min-width: 768px) {
+      .tabela-nap {
+        background: var(--bg-superficie);
+        border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+        border-radius: var(--raio-card);
+        overflow: hidden;
+        box-shadow: var(--sombra);
+      }
+
+      .tabela-nap thead {
+        display: table-header-group;
+        background: var(--bronze);
+        color: #141414;
+      }
+
+      .tabela-nap th {
+        text-align: left;
+        padding: 14px 18px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .tabela-nap tbody {
+        display: table-row-group;
+      }
+
+      .tabela-nap tr {
+        display: table-row;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid color-mix(in srgb, var(--destaque-borda) 22%, transparent);
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      .tabela-nap tbody tr:last-child {
+        border-bottom: none;
+      }
+
+      .tabela-nap td {
+        display: table-cell;
+        padding: 16px 18px;
+        vertical-align: top;
+      }
+
+      .tabela-nap td::before {
+        display: none;
+      }
+    }
+
+    /* ==========================================================================
+       ATO 4: O QUE VAMOS FAZER (Slider Antes/Depois + Cartões Expansíveis)
+       ========================================================================== */
+    .comparador-box {
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 40%, transparent);
+      border-radius: var(--raio-card);
+      padding: 22px 18px;
+      margin-bottom: 32px;
+      box-shadow: var(--sombra);
+    }
+
+    .comparador-palco {
+      position: relative;
+      width: 100%;
+      min-height: 330px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+      user-select: none;
+      background: #161311;
+    }
+
+    .comparador-camada {
+      position: absolute;
+      inset: 0;
+      padding: 22px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .comparador-camada--antes {
+      background: #1B1714;
+      color: #F4EDE1;
+      z-index: 1;
+    }
+
+    .comparador-camada--depois {
+      background: linear-gradient(135deg, #231D18 0%, #2E3A2A 100%);
+      color: #F4EDE1;
+      z-index: 2;
+      clip-path: inset(0 0 0 50%);
+    }
+
+    .comparador-selo {
+      align-self: flex-start;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .comparador-selo--antes {
+      background: var(--alerta-borda);
+      color: #141414;
+    }
+
+    .comparador-selo--depois {
+      background: var(--bronze);
+      color: #141414;
+    }
+
+    .comparador-divisor {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 3px;
+      background: var(--bronze);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .comparador-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bronze);
+      color: #141414;
+      border: 2px solid #F4EDE1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+    }
+
+    .comparador-controle {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .comparador-range {
+      width: 100%;
+      height: 44px;
+      accent-color: var(--bronze);
+      cursor: ew-resize;
+    }
+
+    .comparador-legenda {
+      font-size: 1rem;
+      color: var(--texto-secundario);
+      text-align: center;
+      font-style: italic;
+    }
+
+    /* Cartões Expansíveis da Etapa 1 e Etapa 2 */
+    .etapas-acordeao {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .etapas-acordeao {
+        grid-template-columns: repeat(2, 1fr);
+        align-items: start;
+      }
+    }
+
+    .card-expansivel {
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+      border-radius: var(--raio-card);
+      overflow: hidden;
+      box-shadow: var(--sombra);
+    }
+
+    .card-expansivel__cabecalho {
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-expansivel__toggle {
+      min-height: 44px;
+      width: 100%;
+      margin-top: 6px;
+      background: var(--bg-superficie-elevada);
+      color: var(--texto-principal);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 45%, transparent);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .card-expansivel__corpo {
+      padding: 0 20px 24px;
+      border-top: 1px solid color-mix(in srgb, var(--destaque-borda) 20%, transparent);
+      padding-top: 18px;
+    }
+
+    .card-expansivel[data-expanded="false"] .card-expansivel__corpo {
+      display: none;
+    }
+
+    .lista-itens {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .lista-itens li {
+      position: relative;
+      padding-left: 22px;
+      font-size: 1rem;
+      color: var(--texto-principal);
+    }
+
+    .lista-itens li::before {
+      content: "•";
+      position: absolute;
+      left: 4px;
+      color: var(--destaque);
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       ATO 5: PRÓXIMO PASSO E RODAPÉ
+       ========================================================================== */
+    .passos-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .passos-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .passo-card {
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+      border-radius: var(--raio-card);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--sombra);
+    }
+
+    .passo-card__num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bronze);
+      color: #141414;
+      font-weight: 700;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .passo-card__titulo {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .cta-final {
+      background: var(--bg-superficie-elevada);
+      border: 1px solid var(--destaque-borda);
+      border-radius: var(--raio-card);
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      box-shadow: var(--sombra);
+    }
+
+    @media (min-width: 768px) {
+      .cta-final {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .rodape {
+      padding: 32px var(--espaco-lateral);
+      background: var(--bg-superficie);
+      text-align: center;
+      font-size: 1rem;
+      color: var(--texto-secundario);
+    }
+
+    .rodape__url-impressao {
+      display: none;
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(10, 10, 10, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .lightbox.ativo {
+      display: flex;
+    }
+
+    .lightbox__conteudo {
+      max-width: 860px;
+      width: 100%;
+      background: var(--bg-superficie);
+      border: 1px solid var(--destaque-borda);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .lightbox__fechar {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      min-height: 44px;
+      background: var(--preto);
+      color: var(--creme);
+      border: 1px solid var(--bronze);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .lightbox__legenda {
+      padding: 14px 18px;
+      font-size: 1rem;
+      color: var(--texto-principal);
+    }
+
+    /* ==========================================================================
+       MODO PDF / IMPRESSÃO (@media print)
+       ========================================================================== */
+    @page {
+      size: A4;
+      margin: 14mm;
+    }
+
+    @media print {
+      :root {
+        --bg-principal: #FFFFFF !important;
+        --bg-superficie: #FAF7F2 !important;
+        --bg-superficie-elevada: #FFFFFF !important;
+        --texto-principal: #141414 !important;
+        --texto-secundario: #2B2118 !important;
+        --destaque: #5C4234 !important;
+        --destaque-borda: #8C6730 !important;
+        --alerta-bg: #FDECE8 !important;
+        --alerta-borda: #B3361E !important;
+        --alerta-texto: #4A1005 !important;
+      }
+
+      body {
+        background: #FFFFFF !important;
+        color: #141414 !important;
+        font-size: 11pt;
+      }
+
+      .topbar,
+      .fab-pdf,
+      .btn,
+      .print-card__ampliar,
+      .comparador-controle,
+      .comparador-divisor,
+      .card-expansivel__toggle,
+      .lightbox {
+        display: none !important;
+      }
+
+      .revelar {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+
+      .ato {
+        min-height: auto !important;
+        padding: 12px 0 20px !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        page-break-after: always;
+        break-after: page;
+        border-bottom: none !important;
+      }
+
+      .ato:last-of-type {
+        page-break-after: auto;
+        break-after: auto;
+      }
+
+      /* Na impressão, mostra Antes e Depois lado a lado sem recorte */
+      .comparador-palco {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        min-height: auto !important;
+        background: transparent !important;
+        border: none !important;
+      }
+
+      .comparador-camada {
+        position: static !important;
+        clip-path: none !important;
+        background: #FAF7F2 !important;
+        color: #141414 !important;
+        border: 1px solid #8C6730 !important;
+        border-radius: 8px !important;
+      }
+
+      /* Garante que as Etapas 1 e 2 saiam abertas no PDF */
+      .card-expansivel__corpo {
+        display: block !important;
+      }
+
+      .rodape {
+        background: #FFFFFF !important;
+        border-top: 1px solid #8C6730;
+        padding: 12px 0 !important;
+      }
+
+      .rodape__url-impressao {
+        display: block !important;
+        margin-top: 6px;
+        font-size: 9.5pt;
+        color: #3B2B20 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra Superior -->
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a href="#ato-1" class="topbar__brand">
+        <img src="assets/logo-vo-lila.webp" alt="Logo Vó Lila Gastrobar" class="topbar__logo" />
+        <span class="nowrap">Vó Lila Gastrobar</span>
+      </a>
+      <button type="button" class="theme-toggle" id="btnTema" aria-label="Alternar entre modo escuro e claro">
+        Alternar tema
+      </button>
+    </div>
+    <div class="progresso-atos" aria-label="Progresso da leitura dos 5 atos">
+      <span class="progresso-atos__item ativo" data-ato-bar="1"></span>
+      <span class="progresso-atos__item" data-ato-bar="2"></span>
+      <span class="progresso-atos__item" data-ato-bar="3"></span>
+      <span class="progresso-atos__item" data-ato-bar="4"></span>
+      <span class="progresso-atos__item" data-ato-bar="5"></span>
+    </div>
+  </header>
+
+  <!-- Botão Flutuante para Exportar PDF -->
+  <button type="button" class="fab-pdf" id="btnPdf" aria-label="Baixar apresentação em PDF">
+    Baixar em PDF
+  </button>
+
+  <main>
+    <!-- ======================================================================
+         ATO 1: ABERTURA
+         ====================================================================== -->
+    <section class="ato ato-abertura" id="ato-1">
+      <div class="container revelar">
+        <div class="abertura-card">
+          <div class="abertura-topo">
+            <img src="assets/logo-vo-lila.webp" alt="Logo oficial do Vó Lila Gastrobar" class="abertura-logo" />
+            <div>
+              <span class="ato-indicador" style="margin-bottom: 2px;">Ato 1 • Abertura</span>
+              <p style="color: var(--texto-secundario);">Icó, Ceará • Diagnóstico e Proposta de Presença Digital</p>
+            </div>
+          </div>
+
+          <h1 class="abertura-titulo">
+            Quem procura o <span class="nowrap">Vó Lila</span> no Google hoje encontra <span class="abertura-destaque">5 versões diferentes</span> do mesmo negócio.
+          </h1>
+
+          <p class="subtitulo-ato" style="margin-bottom: 24px;">
+            O <span class="nowrap">Vó Lila Gastrobar</span> já construiu o ativo mais valioso da gastronomia local: uma reputação sólida com <strong>nota 4,4 e 294 avaliações no Google</strong>. Organizar a presença digital é a oportunidade de fazer cada busca se transformar em visita ou pedido sem ruído.
+          </p>
+
+          <div class="abertura-meta">
+            <span><strong>Data:</strong> <time id="dataHoje" datetime="2026-11-18">18 de novembro de 2026</time></span>
+            <span><strong>Local:</strong> R. Monsenhor Frota, 673 - Centro, Icó - CE</span>
+          </div>
+
+          <a href="#ato-2" class="btn btn--primario">Começar</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         ATO 2: A EXPERIÊNCIA DO CLIENTE
+         ====================================================================== -->
+    <section class="ato" id="ato-2">
+      <div class="container revelar">
+        <span class="ato-indicador">Ato 2 • A Jornada Real</span>
+        <h2 class="titulo-ato">A experiência do cliente hoje</h2>
+        <p class="subtitulo-ato">
+          Reproduzimos os 3 passos que um cliente faz no celular quando decide conhecer a casa ou fazer um pedido.
+        </p>
+
+        <div class="timeline">
+          <!-- Passo 1 da Jornada -->
+          <article class="timeline-passo" data-step="1">
+            <div class="timeline-passo__cabecalho">
+              <h3 class="timeline-passo__titulo">1. Buscar no Google</h3>
+              <p class="timeline-passo__texto">
+                O cliente encontra uma excelente avaliação no Google (4,4 ★ com 294 avaliações), mas vê o nome com hífen (<span class="nowrap">"Vó Lila Gastro-bar"</span>) e, logo abaixo nas buscas, uma página no Tripadvisor ainda com o nome antigo da casa.
+              </p>
+            </div>
+            <div class="prints-grid prints-grid--duplo">
+              <div class="print-card">
+                <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/02.png" data-lightbox-caption="Perfil no Google: nota 4,4 com 294 avaliações e grafia 'Vó Lila Gastro-bar'.">
+                  <img src="assets/prints/02.png" loading="lazy" alt="Captura do Perfil no Google mostrando nota 4,4 com 294 avaliações e nome Vó Lila Gastro-bar" onerror="this.parentElement.classList.add('sem-imagem')" />
+                  <span class="print-card__fallback">Print em breve</span>
+                  <span class="print-card__ampliar">Ampliar print</span>
+                </div>
+                <p class="print-card__legenda">Perfil no Google: excelente reputação (4,4 ★), com grafia <span class="nowrap">"Gastro-bar"</span>.</p>
+              </div>
+
+              <div class="print-card">
+                <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/03.png" data-lightbox-caption="Resultado no Tripadvisor exibindo nomenclatura antiga.">
+                  <img src="assets/prints/03.png" loading="lazy" alt="Captura do Tripadvisor mostrando registro com nomenclatura antiga" onerror="this.parentElement.classList.add('sem-imagem')" />
+                  <span class="print-card__fallback">Print em breve</span>
+                  <span class="print-card__ampliar">Ampliar print</span>
+                </div>
+                <p class="print-card__legenda">Tripadvisor: página ainda exibe o nome antigo "Cafe Gourmet".</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Passo 2 da Jornada -->
+          <article class="timeline-passo" data-step="2">
+            <div class="timeline-passo__cabecalho">
+              <h3 class="timeline-passo__titulo">2. Abrir o Instagram</h3>
+              <p class="timeline-passo__texto">
+                No Instagram oficial (<span class="nowrap">"Vó Lila Gastrobar"</span>), o cliente toca no link da bio (Linktree), que exibe o título "VÓ LILA Restaurant" e concentra os botões de cardápio e dois números de WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span>.
+              </p>
+            </div>
+            <div class="prints-grid">
+              <div class="print-card">
+                <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/04.png" data-lightbox-caption="Linktree na bio do Instagram concentrando cardápio e dois contatos de WhatsApp.">
+                  <img src="assets/prints/04.png" loading="lazy" alt="Captura do Linktree na bio do Instagram com atalhos de cardápio e WhatsApp" onerror="this.parentElement.classList.add('sem-imagem')" />
+                  <span class="print-card__fallback">Print em breve</span>
+                  <span class="print-card__ampliar">Ampliar print</span>
+                </div>
+                <p class="print-card__legenda">Link da bio (Linktree): atalhos de cardápio, delivery e reservas com dois números de WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span>.</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Passo 3 da Jornada -->
+          <article class="timeline-passo" data-step="3">
+            <div class="timeline-passo__cabecalho">
+              <h3 class="timeline-passo__titulo">3. Tentar pedir</h3>
+              <p class="timeline-passo__texto">
+                Ao tocar para abrir o cardápio digital no Anota, o cliente visualiza o aviso de loja fechada durante o horário de atendimento.
+              </p>
+            </div>
+            <div class="prints-grid">
+              <div class="print-card">
+                <div class="print-card__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/01.png" data-lightbox-caption="Loja de delivery exibida como offline em horário de funcionamento (observado em 17/11/2026, 17h34).">
+                  <img src="assets/prints/01.png" loading="lazy" alt="Captura da loja no Anota exibindo aviso de Loja offline às 17h34 em 17/11/2026" onerror="this.parentElement.classList.add('sem-imagem')" />
+                  <span class="print-card__fallback">Print em breve</span>
+                  <span class="print-card__ampliar">Ampliar print</span>
+                </div>
+                <p class="print-card__legenda">Loja de delivery exibida como offline em horário de funcionamento (observado em 17/11/2026, 17h34).</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         ATO 3: O QUE ENCONTRAMOS (Tabela NAP + Alerta Anota)
+         ====================================================================== -->
+    <section class="ato" id="ato-3">
+      <div class="container revelar">
+        <span class="ato-indicador">Ato 3 • Consistência de Dados</span>
+        <h2 class="titulo-ato">O que encontramos em cada canal</h2>
+        <p class="subtitulo-ato">
+          Os dados abaixo são o que aparece hoje para quem busca o <span class="nowrap">Vó Lila</span>. Quando nome, endereço e telefone estão iguais em todos os canais, o Google e o cliente confiam mais no cadastro.
+        </p>
+
+        <!-- Alerta de Prioridade do Anota -->
+        <div class="alerta-anota" role="status">
+          <span class="alerta-anota__tag">Ponto de Atenção Imediata • Delivery</span>
+          <p class="alerta-anota__legenda">
+            Loja de delivery exibida como offline em horário de funcionamento (observado em 17/11/2026, 17h34)
+          </p>
+        </div>
+
+        <!-- Tabela NAP Responsiva -->
+        <table class="tabela-nap">
+          <thead>
+            <tr>
+              <th scope="col">Canal</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Endereço</th>
+              <th scope="col">Telefone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Canal"><strong>Perfil no Google</strong></td>
+              <td data-label="Nome"><span class="diff-mark nowrap">Vó Lila Gastro-bar</span></td>
+              <td data-label="Endereço"><span class="diff-mark">R. Monsenhor Frota, 673, Lj 01, Centro, Icó</span></td>
+              <td data-label="Telefone">(88) 99781-0603</td>
+            </tr>
+            <tr>
+              <td data-label="Canal"><strong>Instagram e logo</strong></td>
+              <td data-label="Nome"><span class="nowrap">Vó Lila Gastrobar</span></td>
+              <td data-label="Endereço"><span class="diff-mark">Av. Monsenhor Frota, n. 673, Loja 1</span></td>
+              <td data-label="Telefone"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+            </tr>
+            <tr>
+              <td data-label="Canal"><strong>Anota (delivery)</strong></td>
+              <td data-label="Nome"><span class="diff-mark">Vo Lila Gastrobar</span></td>
+              <td data-label="Endereço"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+              <td data-label="Telefone"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+            </tr>
+            <tr>
+              <td data-label="Canal"><strong>Link da bio (Linktree)</strong></td>
+              <td data-label="Nome"><span class="diff-mark">VÓ LILA Restaurant</span></td>
+              <td data-label="Endereço"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+              <td data-label="Telefone"><span class="diff-mark">Botão WhatsApp com número de 8 dígitos</span> <span class="tag-placeholder">[A CONFIRMAR]</span></td>
+            </tr>
+            <tr>
+              <td data-label="Canal"><strong>Tripadvisor</strong></td>
+              <td data-label="Nome"><span class="diff-mark">Vo Lila Cafe Gourmet</span></td>
+              <td data-label="Endereço"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+              <td data-label="Telefone"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         ATO 4: O QUE VAMOS FAZER (Slider Antes/Depois + Etapas 1 e 2)
+         ====================================================================== -->
+    <section class="ato" id="ato-4">
+      <div class="container revelar">
+        <span class="ato-indicador">Ato 4 • Plano de Organização</span>
+        <h2 class="titulo-ato">O que vamos fazer</h2>
+        <p class="subtitulo-ato">
+          Definir um padrão único de nome, endereço e telefone, aplicar no Perfil da Empresa no Google e integrar a uma página oficial mobile-first, com o dono aprovando cada mudança.
+        </p>
+
+        <!-- Comparador Antes e Depois -->
+        <div class="comparador-box">
+          <div class="comparador-palco" id="comparadorPalco">
+            <!-- Camada Antes -->
+            <div class="comparador-camada comparador-camada--antes">
+              <span class="comparador-selo comparador-selo--antes">Antes (Hoje)</span>
+              <h3 class="titulo-ato" style="font-size: 1.65rem; margin-bottom: 4px;"><span class="nowrap">Vó Lila Gastro-bar</span></h3>
+              <p>★ 4,4 (294 avaliações) • Grafia divergente da logo e do Instagram</p>
+              <p><strong>Endereço:</strong> R. Monsenhor Frota vs. Av. Monsenhor Frota entre canais</p>
+              <p><strong>Link e atendimento:</strong> Agregador externo (Linktree) e dois números de WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span></p>
+            </div>
+
+            <!-- Camada Depois -->
+            <div class="comparador-camada comparador-camada--depois" id="camadaDepois">
+              <span class="comparador-selo comparador-selo--depois">Depois (Padronizado)</span>
+              <h3 class="titulo-ato" style="font-size: 1.65rem; margin-bottom: 4px;"><span class="nowrap">Vó Lila Gastrobar</span></h3>
+              <p>★ 4,4 (294 avaliações) • Nome alinhado à logo e à placa da fachada</p>
+              <p><strong>Cadastro unificado:</strong> Endereço, CEP, pino no mapa e telefone idênticos em todos os canais</p>
+              <p><strong>Página oficial própria:</strong> Acesso direto ao cardápio no Anota, WhatsApp validado e localização</p>
+            </div>
+
+            <!-- Linha divisória do slider -->
+            <div class="comparador-divisor" id="comparadorDivisor" aria-hidden="true">
+              <div class="comparador-handle">↔</div>
+            </div>
+          </div>
+
+          <div class="comparador-controle">
+            <label for="sliderComparador" style="font-weight: 600;">Arraste o controle para comparar o Antes e o Depois:</label>
+            <input type="range" id="sliderComparador" class="comparador-range" min="0" max="100" value="50" aria-label="Controle deslizante de comparação entre antes e depois" />
+            <p class="comparador-legenda">Exemplo ilustrativo, não é o resultado final</p>
+          </div>
+        </div>
+
+        <!-- Cartões Expansíveis: Etapa 1 e Etapa 2 -->
+        <div class="etapas-acordeao">
+          <!-- Etapa 1 -->
+          <article class="card-expansivel" data-expanded="true">
+            <div class="card-expansivel__cabecalho">
+              <span class="ato-indicador" style="margin-bottom: 0;">Etapa 1 • Feito pelo dono ou gerente</span>
+              <h3 class="titulo-ato" style="font-size: 1.75rem; margin-bottom: 4px;">Perfil no Google</h3>
+              <p style="color: var(--texto-secundario);">
+                Organização completa da ficha oficial no Google e nos diretórios públicos, acompanhada pelo dono ou gerente do perfil.
+              </p>
+              <button type="button" class="card-expansivel__toggle" aria-expanded="true">
+                <span>Detalhes da Etapa 1</span>
+                <span class="icone-toggle" aria-hidden="true">Recolher −</span>
+              </button>
+            </div>
+            <div class="card-expansivel__corpo">
+              <ul class="lista-itens">
+                <li>Conferir o nome no Google conforme a logo e a placa da fachada</li>
+                <li>Padronizar nome, endereço e telefone com a placa da fachada</li>
+                <li>Conferir o ponto no mapa e o CEP</li>
+                <li>Corrigir o telefone principal, se necessário</li>
+                <li>Conferir e ajustar horários de funcionamento</li>
+                <li>Atualizar categorias, serviços e seleção de fotos principais</li>
+                <li>Padronizar respostas às avaliações (294 avaliações, nota 4,4)</li>
+                <li>Reivindicar a página no Tripadvisor para atualizar o nome antigo</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Etapa 2 -->
+          <article class="card-expansivel" data-expanded="true">
+            <div class="card-expansivel__cabecalho">
+              <span class="ato-indicador" style="margin-bottom: 0;">Etapa 2 • Presença Oficial</span>
+              <h3 class="titulo-ato" style="font-size: 1.75rem; margin-bottom: 4px;">Página própria mobile-first</h3>
+              <p style="color: var(--texto-secundario);">
+                Substitui o link genérico da bio por uma página própria, leve e com a identidade da marca, com cardápio apontando para o Anota.
+              </p>
+              <button type="button" class="card-expansivel__toggle" aria-expanded="true">
+                <span>Detalhes da Etapa 2</span>
+                <span class="icone-toggle" aria-hidden="true">Recolher −</span>
+              </button>
+            </div>
+            <div class="card-expansivel__corpo">
+              <ul class="lista-itens">
+                <li>Atalho principal "Ver cardápio" apontando diretamente para o Anota</li>
+                <li>Botões de WhatsApp dedicados para reserva e encomenda <span class="tag-placeholder">[A CONFIRMAR]</span></li>
+                <li>Destaque da prova social real (nota 4,4 e 294 avaliações no Google)</li>
+                <li>Apresentação visual do espaço, ambiente e botão "Como chegar"</li>
+                <li>Nome, endereço e telefone idênticos aos do Google, no rodapé e nos dados estruturados da página</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         ATO 5: PRÓXIMO PASSO
+         ====================================================================== -->
+    <section class="ato" id="ato-5">
+      <div class="container revelar">
+        <span class="ato-indicador">Ato 5 • Encaminhamento</span>
+        <h2 class="titulo-ato">Próximo passo</h2>
+        <p class="subtitulo-ato">
+          Foco em organizar os canais para o cliente encontrar a loja aberta e pedir sem atrito.
+        </p>
+
+        <div class="passos-grid">
+          <div class="passo-card">
+            <span class="passo-card__num">1</span>
+            <h3 class="passo-card__titulo">Conversa de 10 minutos</h3>
+            <p>
+              Alinhamento rápido para validar o status da loja no Anota e confirmar os dois números de WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span>.
+            </p>
+          </div>
+
+          <div class="passo-card">
+            <span class="passo-card__num">2</span>
+            <h3 class="passo-card__titulo">Padronização de Google e diretórios</h3>
+            <p>
+              Padronização de nome, endereço e telefone no Google e nos diretórios, e reivindicação da página no Tripadvisor.
+            </p>
+          </div>
+
+          <div class="passo-card">
+            <span class="passo-card__num">3</span>
+            <h3 class="passo-card__titulo">Publicação da página oficial</h3>
+            <p>
+              Entrega da página própria mobile-first pronta para substituir o link da bio com atalhos diretos para cardápio, WhatsApp e localização.
+            </p>
+          </div>
+        </div>
+
+        <div class="cta-final">
+          <div>
+            <h3 class="passo-card__titulo" style="margin-bottom: 4px;">Vamos agendar uma conversa rápida?</h3>
+            <p style="color: var(--texto-secundario);">
+              10 minutos para validarmos os dados pendentes e iniciarmos a Etapa 1.
+            </p>
+          </div>
+          <a href="[LINK]" class="btn btn--primario">
+            Agendar conversa de 10 minutos
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="rodape">
+    <div class="container">
+      <p>Dados coletados em 17/11/2026 a partir de buscas públicas.</p>
+      <p class="rodape__url-impressao" id="urlImpressao"></p>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualização ampliada da captura de tela">
+    <div class="lightbox__conteudo">
+      <button type="button" class="lightbox__fechar" id="lightboxFechar">Fechar (Esc)</button>
+      <img src="" alt="" id="lightboxImg" />
+      <p class="lightbox__legenda" id="lightboxLegenda"></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // 1. Data atual em português e URL no rodapé de impressão
+      const elData = document.getElementById('dataHoje');
+      if (elData) {
+        const hoje = new Date();
+        elData.textContent = hoje.toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        });
+        elData.setAttribute('datetime', hoje.toISOString().split('T')[0]);
+      }
+
+      const elUrl = document.getElementById('urlImpressao');
+      if (elUrl) {
+        elUrl.textContent = 'Documento impresso a partir de: ' + window.location.href;
+      }
+
+      // 2. Alternância de tema (claro / escuro)
+      const btnTema = document.getElementById('btnTema');
+      const root = document.documentElement;
+      if (btnTema) {
+        btnTema.addEventListener('click', function () {
+          const atual = root.getAttribute('data-theme');
+          if (atual === 'light') {
+            root.setAttribute('data-theme', 'dark');
+          } else if (atual === 'dark') {
+            root.setAttribute('data-theme', 'light');
+          } else {
+            const prefereClaro = window.matchMedia('(prefers-color-scheme: light)').matches;
+            root.setAttribute('data-theme', prefereClaro ? 'dark' : 'light');
+          }
+        });
+      }
+
+      // 3. Botão flutuante Baixar em PDF
+      const btnPdf = document.getElementById('btnPdf');
+      if (btnPdf) {
+        btnPdf.addEventListener('click', function () {
+          window.print();
+        });
+      }
+
+      // 4. Animações suaves ao rolar e barra de progresso dos 5 atos
+      const elementosRevelar = document.querySelectorAll('.revelar');
+      const barrasAtos = document.querySelectorAll('.progresso-atos__item');
+      const secoesAtos = document.querySelectorAll('.ato');
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visivel');
+            }
+          });
+        }, { threshold: 0.12 });
+        elementosRevelar.forEach(function (el) { observer.observe(el); });
+
+        const observerAtos = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              const match = entry.target.id.match(/ato-(\d+)/);
+              if (match) {
+                const atoAtual = Number(match[1]);
+                barrasAtos.forEach(function (barra) {
+                  const num = Number(barra.getAttribute('data-ato-bar'));
+                  barra.classList.toggle('ativo', num <= atoAtual);
+                });
+              }
+            }
+          });
+        }, { threshold: 0.35 });
+        secoesAtos.forEach(function (secao) { observerAtos.observe(secao); });
+      } else {
+        elementosRevelar.forEach(function (el) { el.classList.add('visivel'); });
+      }
+
+      // 5. Slider Antes e Depois (suporte a mouse, toque e teclado)
+      const palco = document.getElementById('comparadorPalco');
+      const camadaDepois = document.getElementById('camadaDepois');
+      const divisor = document.getElementById('comparadorDivisor');
+      const sliderInput = document.getElementById('sliderComparador');
+
+      function atualizarComparador(porcentagem) {
+        const valor = Math.max(0, Math.min(100, Number(porcentagem)));
+        if (camadaDepois) {
+          camadaDepois.style.clipPath = 'inset(0 0 0 ' + valor + '%)';
+        }
+        if (divisor) {
+          divisor.style.left = valor + '%';
+        }
+        if (sliderInput && Number(sliderInput.value) !== valor) {
+          sliderInput.value = valor;
+        }
+      }
+
+      if (sliderInput) {
+        sliderInput.addEventListener('input', function (e) {
+          atualizarComparador(e.target.value);
+        });
+      }
+
+      if (palco) {
+        let arrastando = false;
+        function moverPeloPonteiro(clientX) {
+          const rect = palco.getBoundingClientRect();
+          const pos = ((clientX - rect.left) / rect.width) * 100;
+          atualizarComparador(pos);
+        }
+        palco.addEventListener('pointerdown', function (e) {
+          arrastando = true;
+          moverPeloPonteiro(e.clientX);
+        });
+        window.addEventListener('pointermove', function (e) {
+          if (!arrastando) return;
+          moverPeloPonteiro(e.clientX);
+        });
+        window.addEventListener('pointerup', function () {
+          arrastando = false;
+        });
+      }
+
+      // 6. Expandir / recolher cartões da Etapa 1 e Etapa 2
+      document.querySelectorAll('.card-expansivel').forEach(function (card) {
+        const btn = card.querySelector('.card-expansivel__toggle');
+        const icone = card.querySelector('.icone-toggle');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          const aberto = card.getAttribute('data-expanded') === 'true';
+          const novoEstado = !aberto;
+          card.setAttribute('data-expanded', String(novoEstado));
+          btn.setAttribute('aria-expanded', String(novoEstado));
+          if (icone) {
+            icone.textContent = novoEstado ? 'Recolher −' : 'Expandir +';
+          }
+        });
+      });
+
+      // 7. Lightbox para ampliar os prints
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxLegenda = document.getElementById('lightboxLegenda');
+      const lightboxFechar = document.getElementById('lightboxFechar');
+
+      function abrirLightbox(src, alt, caption) {
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || caption || 'Captura de tela ampliada';
+        lightboxLegenda.textContent = caption || '';
+        lightbox.classList.add('ativo');
+        lightboxFechar.focus();
+      }
+
+      function fecharLightbox() {
+        lightbox.classList.remove('ativo');
+        lightboxImg.src = '';
+      }
+
+      document.querySelectorAll('[data-lightbox-src]').forEach(function (card) {
+        card.addEventListener('click', function () {
+          const img = card.querySelector('img');
+          abrirLightbox(
+            card.getAttribute('data-lightbox-src'),
+            img ? img.alt : '',
+            card.getAttribute('data-lightbox-caption')
+          );
+        });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+          }
+        });
+      });
+
+      if (lightboxFechar) {
+        lightboxFechar.addEventListener('click', fecharLightbox);
+      }
+      if (lightbox) {
+        lightbox.addEventListener('click', function (e) {
+          if (e.target === lightbox) fecharLightbox();
+        });
+      }
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('ativo')) {
+          fecharLightbox();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

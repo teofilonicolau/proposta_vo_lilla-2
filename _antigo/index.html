@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vó Lila Gastrobar — Proposta de presença digital</title>
+  <meta name="description" content="Diagnóstico de presença digital e proposta em duas etapas para o Vó Lila Gastrobar (Icó, CE). Dados públicos e próximos passos." />
+
+  <!-- Google Fonts: Cormorant Garamond (serif elegante) & Plus Jakarta Sans (sans-serif limpa) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       PALETA OFICIAL / VARIÁVEIS CSS (:root)
+       Trocar valores abaixo caso o cliente envie manual de marca atualizado.
+       ========================================================================== */
+    :root {
+      --preto: #141414;
+      --creme: #F4EDE1;
+      --madeira: #5C4234;
+      --bronze: #B08A4E;
+      --verde: #2E3A2A;
+
+      /* Tokens semânticos (Modo Escuro padrão — estética Gastrobar) */
+      --bg-principal: var(--preto);
+      --bg-superficie: #1E1B18;
+      --bg-superficie-elevada: #26201B;
+      --texto-principal: var(--creme);
+      --texto-secundario: #DFD5C6;
+      --destaque: #D4AB6A; /* Bronze ajustado para contraste WCAG AA sobre fundo escuro */
+      --destaque-borda: var(--bronze);
+      --madeira-suave: var(--madeira);
+      --verde-suave: var(--verde);
+      --alerta-bg: #2D1612;
+      --alerta-borda: #E06D53;
+      --alerta-texto: #FFDAD2;
+      --sombra: 0 16px 40px rgba(0, 0, 0, 0.45);
+
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --espaco-lateral: 16px;
+      --largura-max: 1040px;
+      --raio-card: 14px;
+    }
+
+    /* Modo Claro via prefers-color-scheme mantendo contraste WCAG AA */
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) {
+        --bg-principal: var(--creme);
+        --bg-superficie: #EAE0D0;
+        --bg-superficie-elevada: #FFFFFF;
+        --texto-principal: var(--preto);
+        --texto-secundario: #3B2B20;
+        --destaque: #6E4F20; /* Bronze escurecido para garantir contraste AA (>4.5:1) sobre creme */
+        --destaque-borda: #8C6730;
+        --alerta-bg: #FDECE8;
+        --alerta-borda: #B3361E;
+        --alerta-texto: #5C1508;
+        --sombra: 0 12px 30px rgba(20, 20, 20, 0.08);
+      }
+    }
+
+    /* Suporte a alternância manual de tema pelo usuário */
+    :root[data-theme="light"] {
+      --bg-principal: var(--creme);
+      --bg-superficie: #EAE0D0;
+      --bg-superficie-elevada: #FFFFFF;
+      --texto-principal: var(--preto);
+      --texto-secundario: #3B2B20;
+      --destaque: #6E4F20;
+      --destaque-borda: #8C6730;
+      --alerta-bg: #FDECE8;
+      --alerta-borda: #B3361E;
+      --alerta-texto: #5C1508;
+      --sombra: 0 12px 30px rgba(20, 20, 20, 0.08);
+    }
+
+    /* ==========================================================================
+       RESET & BASE (Mobile-first, sem rolagem horizontal)
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg-principal);
+      color: var(--texto-principal);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Foco visível acessível (WCAG AA) */
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid var(--destaque);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    /* ==========================================================================
+       BARRA SUPERIOR DISCRETA
+       ========================================================================== */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg-principal) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid color-mix(in srgb, var(--destaque-borda) 25%, transparent);
+      padding: 10px var(--espaco-lateral);
+    }
+
+    .topbar__inner {
+      max-width: var(--largura-max);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .nowrap {
+      white-space: nowrap;
+    }
+
+    .topbar__brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--texto-principal);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .topbar__logo {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--destaque-borda);
+    }
+
+    .topbar__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-toggle {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-superficie);
+      color: var(--texto-principal);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 40%, transparent);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--destaque);
+    }
+
+    /* ==========================================================================
+       LAYOUT DE SEÇÕES (Cada seção ocupa ao menos a tela inteira no celular)
+       ========================================================================== */
+    .secao {
+      min-height: 100svh;
+      padding: 84px var(--espaco-lateral) 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-bottom: 1px solid color-mix(in srgb, var(--destaque-borda) 18%, transparent);
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--largura-max);
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--destaque);
+      margin-bottom: 10px;
+    }
+
+    .titulo-secao {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      color: var(--texto-principal);
+    }
+
+    .subtitulo-secao {
+      font-size: 1rem;
+      color: var(--texto-secundario);
+      max-width: 64ch;
+      margin-bottom: 32px;
+    }
+
+    /* ==========================================================================
+       1. CAPA
+       ========================================================================== */
+    .capa {
+      position: relative;
+      background:
+        radial-gradient(circle at 85% 20%, color-mix(in srgb, var(--madeira) 35%, transparent), transparent 55%),
+        radial-gradient(circle at 15% 80%, color-mix(in srgb, var(--verde) 30%, transparent), transparent 50%),
+        var(--bg-principal);
+    }
+
+    .capa__card {
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+      border-radius: 20px;
+      padding: 36px 24px;
+      box-shadow: var(--sombra);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .capa__topo {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .capa__logo {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--destaque-borda);
+      flex-shrink: 0;
+    }
+
+    .capa__local {
+      font-size: 1rem;
+      color: var(--texto-secundario);
+      letter-spacing: 0.02em;
+    }
+
+    .capa__titulo {
+      font-family: var(--font-serif);
+      font-size: clamp(1.85rem, 6.5vw, 3.75rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+
+    .capa__subtitulo {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: clamp(1.35rem, 4vw, 1.85rem);
+      color: var(--destaque);
+      margin-bottom: 24px;
+    }
+
+    .capa__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      padding-top: 20px;
+      border-top: 1px solid color-mix(in srgb, var(--destaque-borda) 25%, transparent);
+      font-size: 1rem;
+      color: var(--texto-secundario);
+    }
+
+    .capa__cta-nav {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       BOTÕES PADRÃO
+       ========================================================================== */
+    .btn {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.2s ease, background-color 0.2s ease;
+      border: none;
+      text-align: center;
+    }
+
+    .btn:active {
+      transform: scale(0.99);
+    }
+
+    .btn--primario {
+      background-color: var(--bronze);
+      color: #141414;
+    }
+
+    .btn--primario:hover {
+      filter: brightness(1.08);
+    }
+
+    .btn--secundario {
+      background-color: transparent;
+      color: var(--texto-principal);
+      border: 1px solid var(--destaque-borda);
+    }
+
+    .btn--secundario:hover {
+      background-color: color-mix(in srgb, var(--destaque-borda) 15%, transparent);
+    }
+
+    /* ==========================================================================
+       2. DIAGNÓSTICO (4 Cartões com Prints)
+       ========================================================================== */
+    .grid-diagnostico {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .grid-diagnostico {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .card-diag {
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+      border-radius: var(--raio-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--sombra);
+    }
+
+    /* Destaque visual de alerta para o cartão a) PRIORIDADE 1 */
+    .card-diag--alerta {
+      background: var(--alerta-bg);
+      border: 2px solid var(--alerta-borda);
+    }
+
+    .card-diag__midia {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: #181512;
+      overflow: hidden;
+      cursor: zoom-in;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-diag__fallback {
+      display: none;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #F4EDE1;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .card-diag__midia.sem-imagem .card-diag__fallback {
+      display: block;
+    }
+
+    .card-diag__midia.sem-imagem img {
+      display: none;
+    }
+
+    .card-diag__midia img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .card-diag__midia:hover img {
+      transform: scale(1.02);
+    }
+
+    .card-diag__ampliar {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(20, 20, 20, 0.88);
+      color: #F4EDE1;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(176, 138, 78, 0.65);
+      pointer-events: none;
+    }
+
+    .card-diag__corpo {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      align-self: flex-start;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--destaque-borda) 20%, transparent);
+      color: var(--destaque);
+    }
+
+    .badge--alerta {
+      background: var(--alerta-borda);
+      color: #141414;
+    }
+
+    .card-diag__frase {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--texto-principal);
+      line-height: 1.5;
+    }
+
+    .card-diag--alerta .card-diag__frase {
+      color: var(--alerta-texto);
+    }
+
+    /* ==========================================================================
+       2B. COMPARATIVO DE CANAIS (Tabela responsiva -> Cartões no celular)
+       ========================================================================== */
+    .tabela-canais {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+
+    .tabela-canais thead {
+      display: none;
+    }
+
+    .tabela-canais tbody {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .tabela-canais tr {
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+      border-radius: var(--raio-card);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--sombra);
+    }
+
+    .tabela-canais td {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 1rem;
+      color: var(--texto-principal);
+      word-break: break-word;
+    }
+
+    .tabela-canais td::before {
+      content: attr(data-label);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--destaque);
+    }
+
+    @media (min-width: 768px) {
+      .tabela-canais {
+        background: var(--bg-superficie);
+        border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+        border-radius: var(--raio-card);
+        overflow: hidden;
+        box-shadow: var(--sombra);
+      }
+
+      .tabela-canais thead {
+        display: table-header-group;
+        background: var(--bronze);
+        color: #141414;
+      }
+
+      .tabela-canais th {
+        text-align: left;
+        padding: 14px 18px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .tabela-canais tbody {
+        display: table-row-group;
+      }
+
+      .tabela-canais tr {
+        display: table-row;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid color-mix(in srgb, var(--destaque-borda) 22%, transparent);
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      .tabela-canais tbody tr:last-child {
+        border-bottom: none;
+      }
+
+      .tabela-canais td {
+        display: table-cell;
+        padding: 16px 18px;
+        font-size: 1rem;
+        vertical-align: top;
+      }
+
+      .tabela-canais td::before {
+        display: none;
+      }
+    }
+
+    .destaque-padrao {
+      background: var(--bg-superficie-elevada);
+      border: 1px solid var(--destaque-borda);
+      border-left: 4px solid var(--bronze);
+      border-radius: var(--raio-card);
+      padding: 20px 22px;
+      font-size: 1rem;
+      color: var(--texto-principal);
+      box-shadow: var(--sombra);
+    }
+
+    /* ==========================================================================
+       3. PROPOSTA EM DUAS ETAPAS
+       ========================================================================== */
+    .grid-etapas {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .grid-etapas {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .card-etapa {
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 35%, transparent);
+      border-radius: var(--raio-card);
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: var(--sombra);
+    }
+
+    .card-etapa__numero {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--destaque);
+      margin-bottom: 6px;
+    }
+
+    .card-etapa__titulo {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .card-etapa__descricao {
+      color: var(--texto-secundario);
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+
+    .lista-itens {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .lista-itens li {
+      position: relative;
+      padding-left: 22px;
+      font-size: 1rem;
+      color: var(--texto-principal);
+    }
+
+    .lista-itens li::before {
+      content: "•";
+      position: absolute;
+      left: 4px;
+      color: var(--destaque);
+      font-weight: 700;
+    }
+
+    .card-etapa__rodape {
+      padding-top: 16px;
+      border-top: 1px solid color-mix(in srgb, var(--destaque-borda) 22%, transparent);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 1rem;
+      color: var(--texto-secundario);
+    }
+
+    .tag-placeholder {
+      font-family: monospace;
+      font-weight: 700;
+      color: var(--alerta-texto);
+      background: var(--alerta-bg);
+      border: 1px solid var(--alerta-borda);
+      padding: 2px 7px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+
+    /* ==========================================================================
+       4. MOCKUP DA PÁGINA (Frame de celular em HTML/CSS puro)
+       ========================================================================== */
+    .mockup-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (min-width: 860px) {
+      .mockup-layout {
+        grid-template-columns: 1fr 380px;
+      }
+    }
+
+    .phone-frame {
+      width: 100%;
+      max-width: 350px;
+      margin: 0 auto;
+      background: #0D0D0D;
+      border: 10px solid #2A231E;
+      border-radius: 42px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--bronze);
+      overflow: hidden;
+      color: #F4EDE1;
+    }
+
+    .phone-frame__notch {
+      width: 110px;
+      height: 20px;
+      background: #2A231E;
+      margin: 0 auto;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+
+    .phone-screen {
+      padding: 22px 16px 26px;
+      background:
+        linear-gradient(180deg, rgba(92, 66, 52, 0.48) 0%, rgba(20, 20, 20, 0.98) 45%),
+        #141414;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+    }
+
+    .phone-screen__logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid #B08A4E;
+      object-fit: cover;
+    }
+
+    .phone-screen__status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      background: #2E3A2A;
+      color: #F4EDE1;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(176, 138, 78, 0.4);
+    }
+
+    .phone-screen__dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #76D275;
+    }
+
+    .phone-screen__title {
+      font-family: var(--font-serif);
+      font-size: 1.65rem;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #F4EDE1;
+      white-space: nowrap;
+    }
+
+    .phone-screen__subtitle {
+      font-size: 1rem;
+      color: #DFD5C6;
+      max-width: 28ch;
+    }
+
+    .phone-screen__rating {
+      font-size: 0.95rem;
+      color: #D4AB6A;
+      font-weight: 600;
+      background: rgba(176, 138, 78, 0.14);
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    .phone-screen__buttons {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .phone-btn {
+      width: 100%;
+      min-height: 44px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.15s ease;
+    }
+
+    .phone-btn--cardapio {
+      background: #B08A4E;
+      color: #141414;
+    }
+
+    .phone-btn--whats {
+      background: #2E3A2A;
+      color: #F4EDE1;
+      border: 1px solid #B08A4E;
+    }
+
+    .phone-btn--mapa {
+      background: #1F1B18;
+      color: #F4EDE1;
+      border: 1px solid rgba(244, 237, 225, 0.25);
+    }
+
+    .phone-screen__footer {
+      margin-top: 6px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(244, 237, 225, 0.15);
+      width: 100%;
+      font-size: 0.92rem;
+      color: #DFD5C6;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* ==========================================================================
+       5. PRÓXIMOS PASSOS
+       ========================================================================== */
+    .passos-lista {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    @media (min-width: 768px) {
+      .passos-lista {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .passo-item {
+      background: var(--bg-superficie);
+      border: 1px solid color-mix(in srgb, var(--destaque-borda) 30%, transparent);
+      border-radius: var(--raio-card);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .passo-item__num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bronze);
+      color: #141414;
+      font-weight: 700;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .passo-item__titulo {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .passo-item__texto {
+      font-size: 1rem;
+      color: var(--texto-secundario);
+    }
+
+    .cta-box {
+      background: var(--bg-superficie-elevada);
+      border: 1px solid var(--destaque-borda);
+      border-radius: var(--raio-card);
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      box-shadow: var(--sombra);
+    }
+
+    @media (min-width: 768px) {
+      .cta-box {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    /* ==========================================================================
+       6. RODAPÉ
+       ========================================================================== */
+    .rodape {
+      padding: 32px var(--espaco-lateral);
+      background: var(--bg-superficie);
+      text-align: center;
+      font-size: 1rem;
+      color: var(--texto-secundario);
+    }
+
+    /* ==========================================================================
+       MODAL DE AMPLIAÇÃO DOS PRINTS (JS PURO)
+       ========================================================================== */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(10, 10, 10, 0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .lightbox.ativo {
+      display: flex;
+    }
+
+    .lightbox__conteudo {
+      max-width: 860px;
+      width: 100%;
+      background: var(--bg-superficie);
+      border: 1px solid var(--destaque-borda);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .lightbox__fechar {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      min-height: 44px;
+      background: var(--preto);
+      color: var(--creme);
+      border: 1px solid var(--bronze);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .lightbox__legenda {
+      padding: 14px 18px;
+      font-size: 1rem;
+      color: var(--texto-principal);
+      border-top: 1px solid color-mix(in srgb, var(--destaque-borda) 25%, transparent);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Barra fixa discreta -->
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a href="#capa" class="topbar__brand">
+        <img src="assets/logo-vo-lila.webp" alt="Logo Vó Lila Gastrobar" class="topbar__logo" />
+        <span>Vó Lila Gastrobar</span>
+      </a>
+      <div class="topbar__actions">
+        <button type="button" class="theme-toggle" id="btnTema" aria-label="Alternar entre modo escuro e claro">
+          Alternar tema
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. CAPA -->
+    <section class="secao capa" id="capa">
+      <div class="container">
+        <div class="capa__card">
+          <div class="capa__topo">
+            <img src="assets/logo-vo-lila.webp" alt="Emblema Vó Lila Gastrobar" class="capa__logo" />
+            <div>
+              <span class="eyebrow">Icó, Ceará</span>
+              <p class="capa__local">R. Monsenhor Frota, 673 - Lj 01 - Centro</p>
+            </div>
+          </div>
+
+          <h1 class="capa__titulo">Presença digital — <span class="nowrap">Vó Lila Gastrobar</span></h1>
+          <p class="capa__subtitulo">Diagnóstico e proposta</p>
+
+          <div class="capa__meta">
+            <span><strong>Data:</strong> <time id="dataHoje" datetime="2026-11-18">18/11/2026</time></span>
+            <span><strong>Formato:</strong> Leitura rápida (3 min)</span>
+            <span><strong>Objetivo:</strong> Organização de canais e atendimento</span>
+          </div>
+
+          <div class="capa__cta-nav">
+            <a href="#diagnostico" class="btn btn--primario">Ver diagnóstico</a>
+            <a href="#proposta" class="btn btn--secundario">Ver proposta em 2 etapas</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. DIAGNÓSTICO EM 4 CARTÕES -->
+    <section class="secao" id="diagnostico">
+      <div class="container">
+        <span class="eyebrow">Cenário Atual</span>
+        <h2 class="titulo-secao">Diagnóstico em 4 pontos</h2>
+        <p class="subtitulo-secao">
+          Levantamento objetivo realizado a partir das buscas públicas e canais oficiais de atendimento. Toque em qualquer imagem para ampliar.
+        </p>
+
+        <div class="grid-diagnostico">
+          <!-- Cartão A: PRIORIDADE 1 (Alerta) -->
+          <article class="card-diag card-diag--alerta">
+            <div class="card-diag__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/01.png" data-lightbox-caption="PRIORIDADE 1: Loja de delivery exibindo 'Loja offline' em horário de funcionamento (17/11/2026, 17h34).">
+              <img src="assets/prints/01.png" loading="lazy" alt="Captura de tela da plataforma de delivery exibindo aviso de Loja offline às 17h34 em 17/11/2026" onerror="this.parentElement.classList.add('sem-imagem')" />
+              <span class="card-diag__fallback">Print em breve</span>
+              <span class="card-diag__ampliar">Ampliar print</span>
+            </div>
+            <div class="card-diag__corpo">
+              <span class="badge badge--alerta">Prioridade 1 • Alerta</span>
+              <p class="card-diag__frase">
+                PRIORIDADE 1: loja de delivery aparece como "Loja offline" em horário de funcionamento (observado em 17/11/2026, 17h34).
+              </p>
+            </div>
+          </article>
+
+          <!-- Cartão B: Perfil no Google -->
+          <article class="card-diag">
+            <div class="card-diag__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/02.png" data-lightbox-caption="Perfil no Google com nota 4,4 (294 avaliações) e divergência de grafia com hífen.">
+              <img src="assets/prints/02.png" loading="lazy" alt="Captura de tela do Perfil no Google mostrando nota 4,4 com 294 avaliações e grafia com hífen Gastro-bar" onerror="this.parentElement.classList.add('sem-imagem')" />
+              <span class="card-diag__fallback">Print em breve</span>
+              <span class="card-diag__ampliar">Ampliar print</span>
+            </div>
+            <div class="card-diag__corpo">
+              <span class="badge">Ponto Forte & Padronização</span>
+              <p class="card-diag__frase">
+                Perfil no Google: nota 4,4 com 294 avaliações (ponto forte). Nome com hífen diferente do Instagram (<span class="nowrap">"Gastro-bar"</span> x <span class="nowrap">"Gastrobar"</span>).
+              </p>
+            </div>
+          </article>
+
+          <!-- Cartão C: Tripadvisor -->
+          <article class="card-diag">
+            <div class="card-diag__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/03.png" data-lightbox-caption="Página no Tripadvisor ainda exibe nomenclatura antiga nas buscas públicas.">
+              <img src="assets/prints/03.png" loading="lazy" alt="Captura de tela de resultado de busca mostrando página no Tripadvisor com nome antigo desatualizado" onerror="this.parentElement.classList.add('sem-imagem')" />
+              <span class="card-diag__fallback">Print em breve</span>
+              <span class="card-diag__ampliar">Ampliar print</span>
+            </div>
+            <div class="card-diag__corpo">
+              <span class="badge">Diretórios Externos</span>
+              <p class="card-diag__frase">
+                Nome antigo "Cafe Gourmet" aparece no Tripadvisor (não no Google). Ação: reivindicar a página.
+              </p>
+            </div>
+          </article>
+
+          <!-- Cartão D: Linktree -->
+          <article class="card-diag">
+            <div class="card-diag__midia" role="button" tabindex="0" data-lightbox-src="assets/prints/04.png" data-lightbox-caption="Link da bio (Linktree) concentrando cardápio, WhatsApp de delivery e reservas.">
+              <img src="assets/prints/04.png" loading="lazy" alt="Captura de tela do Linktree na bio do Instagram com botões para cardápio, delivery e dois números de WhatsApp" onerror="this.parentElement.classList.add('sem-imagem')" />
+              <span class="card-diag__fallback">Print em breve</span>
+              <span class="card-diag__ampliar">Ampliar print</span>
+            </div>
+            <div class="card-diag__corpo">
+              <span class="badge">Atendimento & Bio</span>
+              <p class="card-diag__frase">
+                Link da bio (Linktree) concentra cardápio, WhatsApp de delivery e reservas, com dois números de WhatsApp a confirmar <span class="tag-placeholder">[A CONFIRMAR]</span>.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOVA SEÇÃO: COMPARATIVO DE CANAIS -->
+    <section class="secao" id="canais">
+      <div class="container">
+        <span class="eyebrow">Consistência de Cadastro</span>
+        <h2 class="titulo-secao">Nome, endereço e telefone: onde o cliente se confunde</h2>
+        <p class="subtitulo-secao">
+          Os dados abaixo são o que aparece hoje para quem busca o Vó Lila. Quando estão iguais em todos os canais, o Google e o cliente confiam mais no cadastro.
+        </p>
+
+        <table class="tabela-canais">
+          <thead>
+            <tr>
+              <th scope="col">Canal</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Endereço</th>
+              <th scope="col">Telefone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Canal"><strong>Perfil no Google</strong></td>
+              <td data-label="Nome"><span class="nowrap">Vó Lila Gastro-bar</span></td>
+              <td data-label="Endereço">R. Monsenhor Frota, 673, Lj 01, Centro, Icó</td>
+              <td data-label="Telefone">(88) 99781-0603</td>
+            </tr>
+            <tr>
+              <td data-label="Canal"><strong>Instagram e logo</strong></td>
+              <td data-label="Nome"><span class="nowrap">Vó Lila Gastrobar</span></td>
+              <td data-label="Endereço">Av. Monsenhor Frota, n. 673, Loja 1</td>
+              <td data-label="Telefone"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+            </tr>
+            <tr>
+              <td data-label="Canal"><strong>Anota (delivery)</strong></td>
+              <td data-label="Nome">Vo Lila Gastrobar</td>
+              <td data-label="Endereço"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+              <td data-label="Telefone"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+            </tr>
+            <tr>
+              <td data-label="Canal"><strong>Link da bio (Linktree)</strong></td>
+              <td data-label="Nome">VÓ LILA Restaurant</td>
+              <td data-label="Endereço"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+              <td data-label="Telefone">Botão WhatsApp com número de 8 dígitos <span class="tag-placeholder">[A CONFIRMAR]</span></td>
+            </tr>
+            <tr>
+              <td data-label="Canal"><strong>Tripadvisor</strong></td>
+              <td data-label="Nome">Vo Lila Cafe Gourmet</td>
+              <td data-label="Endereço"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+              <td data-label="Telefone"><span class="tag-placeholder">[A CONFIRMAR]</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="destaque-padrao">
+          <p><strong>O que fazemos:</strong> definir um padrão único (nome, endereço e telefone), aplicar no Perfil da Empresa no Google e replicar nos demais canais, com o dono aprovando cada mudança.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PROPOSTA EM DUAS ETAPAS -->
+    <section class="secao" id="proposta">
+      <div class="container">
+        <span class="eyebrow">Plano de Ação</span>
+        <h2 class="titulo-secao">Proposta em duas etapas</h2>
+        <p class="subtitulo-secao">
+          Organização prática para corrigir ruídos de busca e centralizar os pedidos e reservas com identidade própria.
+        </p>
+
+        <div class="grid-etapas">
+          <!-- Etapa 1 -->
+          <article class="card-etapa">
+            <div>
+              <p class="card-etapa__numero">Etapa 1</p>
+              <h3 class="card-etapa__titulo">Perfil no Google</h3>
+              <p class="card-etapa__descricao">
+                Padronização técnica e atualização das informações consultadas por quem busca o <span class="nowrap">Vó Lila Gastrobar</span> no Google e Google Maps.
+              </p>
+              <ul class="lista-itens">
+                <li>Conferir o nome no Google conforme a logo e a placa da fachada</li>
+                <li>Padronizar nome, endereço e telefone com a placa da fachada</li>
+                <li>Conferir o ponto no mapa e o CEP</li>
+                <li>Corrigir o telefone principal, se necessário</li>
+                <li>Conferir e ajustar horários de funcionamento</li>
+                <li>Revisar categorias e serviços oferecidos</li>
+                <li>Organizar seleção de fotos principais da casa e pratos</li>
+                <li>Padronizar respostas às avaliações (294 avaliações, nota 4,4)</li>
+                <li>Execução acompanhada pelo dono ou gerente do perfil</li>
+              </ul>
+            </div>
+            <div class="card-etapa__rodape">
+              <span>Responsável no acesso: <strong>Dono ou gerente do perfil</strong></span>
+              <span>Investimento: <span class="tag-placeholder">[PREÇO]</span></span>
+            </div>
+          </article>
+
+          <!-- Etapa 2 -->
+          <article class="card-etapa">
+            <div>
+              <p class="card-etapa__numero">Etapa 2</p>
+              <h3 class="card-etapa__titulo">Página oficial mobile-first</h3>
+              <p class="card-etapa__descricao">
+                Substitui o link genérico da bio por uma página própria, leve e com a identidade da marca.
+              </p>
+              <ul class="lista-itens">
+                <li>Atalho direto de cardápio que aponta para o Anota</li>
+                <li>Botões de WhatsApp separados para reserva e encomenda <span class="tag-placeholder">[A CONFIRMAR]</span></li>
+                <li>Destaque de prova social (nota 4,4 e 294 avaliações reais)</li>
+                <li>Apresentação visual do espaço e ambiente</li>
+                <li>Localização integrada ao mapa (Centro, Icó - CE)</li>
+                <li>Nome, endereço e telefone idênticos aos do Google, no rodapé e nos dados estruturados da página</li>
+              </ul>
+            </div>
+            <div class="card-etapa__rodape">
+              <span>Prazo estimado: <span class="tag-placeholder">[A CONFIRMAR]</span></span>
+              <span>Investimento: <span class="tag-placeholder">[PREÇO]</span></span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. MOCKUP DA PÁGINA -->
+    <section class="secao" id="mockup">
+      <div class="container">
+        <div class="mockup-layout">
+          <div>
+            <span class="eyebrow">Visualização da Etapa 2</span>
+            <h2 class="titulo-secao">Mockup da página oficial</h2>
+            <p class="subtitulo-secao">
+              Demonstração em código (HTML/CSS) da dobra principal que o cliente verá ao tocar no link da bio no celular: leitura clara, identidade de gastrobar e atalhos diretos para ação.
+            </p>
+            <ul class="lista-itens" style="margin-bottom: 24px;">
+              <li>Acesso imediato ao cardápio digital (Anota)</li>
+              <li>Canal direto no WhatsApp com números validados <span class="tag-placeholder">[A CONFIRMAR]</span></li>
+              <li>Rota com 1 toque pelo Google Maps</li>
+            </ul>
+          </div>
+
+          <!-- Frame de celular em HTML/CSS puro -->
+          <div class="phone-frame" role="region" aria-label="Mockup da página mobile do Vó Lila Gastrobar">
+            <div class="phone-frame__notch" aria-hidden="true"></div>
+            <div class="phone-screen">
+              <img src="assets/logo-vo-lila.webp" loading="lazy" alt="Logo Vó Lila Gastrobar no mockup mobile" class="phone-screen__logo" />
+
+              <div class="phone-screen__status">
+                <span class="phone-screen__dot" aria-hidden="true"></span>
+                <span>Seg a dom · 11:00 às 00:00</span>
+              </div>
+
+              <h3 class="phone-screen__title">Vó Lila Gastrobar</h3>
+              <p class="phone-screen__subtitle"><span class="tag-placeholder">[A CONFIRMAR]</span> frase de apresentação</p>
+
+              <div class="phone-screen__rating">
+                ★ 4,4 no Google (294 avaliações)
+              </div>
+
+              <div class="phone-screen__buttons">
+                <a href="#proximos-passos" class="phone-btn phone-btn--cardapio">
+                  Ver cardápio
+                </a>
+                <a href="#proximos-passos" class="phone-btn phone-btn--whats">
+                  Pedir pelo WhatsApp
+                </a>
+                <a href="#proximos-passos" class="phone-btn phone-btn--mapa">
+                  Como chegar
+                </a>
+              </div>
+
+              <div class="phone-screen__footer">
+                <span>R. Monsenhor Frota, 673 - Lj 01 - Centro, Icó - CE</span>
+                <span>Reservas e encomendas • WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. PRÓXIMOS PASSOS -->
+    <section class="secao" id="proximos-passos">
+      <div class="container">
+        <span class="eyebrow">Encaminhamento</span>
+        <h2 class="titulo-secao">Próximos passos</h2>
+        <p class="subtitulo-secao">
+          Foco em organizar os canais para o cliente encontrar a loja aberta e pedir sem atrito.
+        </p>
+
+        <div class="passos-lista">
+          <div class="passo-item">
+            <span class="passo-item__num">1</span>
+            <h3 class="passo-item__titulo">Alinhamento de 10 minutos</h3>
+            <p class="passo-item__texto">
+              Conversa rápida para validar o status da loja no Anota e confirmar os dois números de WhatsApp <span class="tag-placeholder">[A CONFIRMAR]</span>.
+            </p>
+          </div>
+
+          <div class="passo-item">
+            <span class="passo-item__num">2</span>
+            <h3 class="passo-item__titulo">Ajuste de Google e diretórios</h3>
+            <p class="passo-item__texto">
+              Padronização de nome, endereço e telefone no Google e nos diretórios, e reivindicação da página no Tripadvisor.
+            </p>
+          </div>
+
+          <div class="passo-item">
+            <span class="passo-item__num">3</span>
+            <h3 class="passo-item__titulo">Publicação da página oficial</h3>
+            <p class="passo-item__texto">
+              Entrega da página mobile-first pronta para substituir o link da bio com atalhos diretos para cardápio, WhatsApp e localização.
+            </p>
+          </div>
+        </div>
+
+        <div class="cta-box">
+          <div>
+            <h3 class="passo-item__titulo" style="margin-bottom: 4px;">Vamos conversar rapidamente?</h3>
+            <p class="passo-item__texto">
+              Escolha o melhor horário para uma reunião objetiva de 10 minutos (presencial ou por chamada).
+            </p>
+          </div>
+          <a href="[LINK]" class="btn btn--primario">
+            Agendar alinhamento de 10 minutos
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 6. RODAPÉ -->
+  <footer class="rodape">
+    <div class="container">
+      <p>Dados coletados em 17/11/2026 a partir de buscas públicas. Valores podem mudar.</p>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal para ampliar os prints -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visualização ampliada da captura de tela">
+    <div class="lightbox__conteudo">
+      <button type="button" class="lightbox__fechar" id="lightboxFechar">Fechar (Esc)</button>
+      <img src="" alt="" id="lightboxImg" />
+      <p class="lightbox__legenda" id="lightboxLegenda"></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // 1. Atualiza a data de hoje na capa em formato pt-BR
+      const elData = document.getElementById('dataHoje');
+      if (elData) {
+        const hoje = new Date();
+        elData.textContent = hoje.toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric'
+        });
+        elData.setAttribute('datetime', hoje.toISOString().split('T')[0]);
+      }
+
+      // 2. Alternância manual de tema (respeitando prefers-color-scheme por padrão)
+      const btnTema = document.getElementById('btnTema');
+      const root = document.documentElement;
+      if (btnTema) {
+        btnTema.addEventListener('click', function () {
+          const atual = root.getAttribute('data-theme');
+          if (atual === 'light') {
+            root.setAttribute('data-theme', 'dark');
+          } else if (atual === 'dark') {
+            root.setAttribute('data-theme', 'light');
+          } else {
+            const prefereClaro = window.matchMedia('(prefers-color-scheme: light)').matches;
+            root.setAttribute('data-theme', prefereClaro ? 'dark' : 'light');
+          }
+        });
+      }
+
+      // 3. Lightbox para ampliar os 4 prints do diagnóstico
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxLegenda = document.getElementById('lightboxLegenda');
+      const lightboxFechar = document.getElementById('lightboxFechar');
+
+      function abrirLightbox(src, alt, caption) {
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || caption || 'Captura de tela ampliada';
+        lightboxLegenda.textContent = caption || '';
+        lightbox.classList.add('ativo');
+        lightboxFechar.focus();
+      }
+
+      function fecharLightbox() {
+        lightbox.classList.remove('ativo');
+        lightboxImg.src = '';
+      }
+
+      document.querySelectorAll('[data-lightbox-src]').forEach(function (card) {
+        card.addEventListener('click', function () {
+          const img = card.querySelector('img');
+          abrirLightbox(
+            card.getAttribute('data-lightbox-src'),
+            img ? img.alt : '',
+            card.getAttribute('data-lightbox-caption')
+          );
+        });
+        card.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+          }
+        });
+      });
+
+      if (lightboxFechar) {
+        lightboxFechar.addEventListener('click', fecharLightbox);
+      }
+      if (lightbox) {
+        lightbox.addEventListener('click', function (e) {
+          if (e.target === lightbox) fecharLightbox();
+        });
+      }
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('ativo')) {
+          fecharLightbox();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
